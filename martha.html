@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be Wise MIS System</title>
+
+<style>
+
+/* RESET */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+
+/* LOGIN */
+.login{
+    width:320px;
+    margin:120px auto;
+    padding:25px;
+    text-align:center;
+    box-shadow:0 0 10px #ccc;
+    border-radius:10px;
+}
+
+input{
+    width:90%;
+    padding:10px;
+    margin:8px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+button{
+    padding:10px;
+    width:95%;
+    background:#004aad;
+    color:white;
+    border:none;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+button:hover{
+    background:#1408f1;
+}
+
+/* LAYOUT */
+.hidden{display:none;}
+
+.sidebar{
+    width:220px;
+    height:100vh;
+    background:#1408f1;
+    color:white;
+    position:fixed;
+    left:0;
+    top:0;
+    padding:20px;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    margin:15px 0;
+    padding:8px;
+    border-radius:5px;
+}
+
+.sidebar a:hover{
+    background:rgba(255,255,255,0.2);
+}
+
+.main{
+    margin-left:240px;
+    padding:20px;
+    background:#f5f7fa;
+    min-height:100vh;
+}
+
+/* SECTIONS */
+.section{
+    margin-top:20px;
+}
+
+/* LIST */
+ul li{
+    background:white;
+    margin:8px 0;
+    padding:10px;
+    list-style:none;
+    border-left:4px solid #004aad;
+    border-radius:5px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="loginPage" class="login">
+    <h2>BE WISE MIS SYSTEM</h2>
+
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h2>BE WISE MIS</h2>
+
+        <a href="#" onclick="showSection('home')">🏠 Dashboard</a>
+        <a href="#" onclick="showSection('products')">📦 Products</a>
+        <a href="#" onclick="showSection('sales')">💰 Sales</a>
+        <a href="#" onclick="logout()">🚪 Logout</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+
+        <!-- HOME -->
+        <div id="home" class="section">
+            <h1>Dashboard Overview</h1>
+            <p>Welcome to Be Wise MIS System</p>
+        </div>
+
+        <!-- PRODUCTS -->
+        <div id="products" class="section hidden">
+            <h1>Products Management</h1>
+
+            <input id="pname" placeholder="Product Name">
+            <input id="pprice" placeholder="Price">
+
+            <button onclick="addProduct()">Add Product</button>
+
+            <ul id="productList"></ul>
+        </div>
+
+        <!-- SALES -->
+        <div id="sales" class="section hidden">
+            <h1>Sales Report</h1>
+
+            <p>Total Products: <span id="totalProducts">0</span></p>
+            <p>Total Sales: <span id="totalSales">0</span> RWF</p>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+/* DATA */
+let products = [];
+let totalSales = 0;
+
+/* LOGIN */
+function login(){
+
+    let user = document.getElementById("username").value;
+    let pass = document.getElementById("password").value;
+
+    if(user === "admin" && pass === "1234"){
+
+        document.getElementById("loginPage").classList.add("hidden");
+        document.getElementById("dashboard").classList.remove("hidden");
+
+    }else{
+        alert("Wrong username or password!");
+    }
+}
+
+/* LOGOUT */
+function logout(){
+    location.reload();
+}
+
+/* NAVIGATION */
+function showSection(id){
+
+    document.querySelectorAll(".section").forEach(sec=>{
+        sec.classList.add("hidden");
+    });
+
+    document.getElementById(id).classList.remove("hidden");
+}
+
+/* ADD PRODUCT */
+function addProduct(){
+
+    let name = document.getElementById("pname").value;
+    let price = Number(document.getElementById("pprice").value);
+
+    if(name === "" || price === ""){
+        alert("Please fill all fields");
+        return;
+    }
+
+    products.push({name, price});
+
+    totalSales += price;
+
+    updateUI();
+}
+
+/* UPDATE UI */
+function updateUI(){
+
+    let list = document.getElementById("productList");
+    list.innerHTML = "";
+
+    products.forEach(p=>{
+        list.innerHTML += `<li>${p.name} - ${p.price} RWF</li>`;
+    });
+
+    document.getElementById("totalProducts").innerText = products.length;
+    document.getElementById("totalSales").innerText = totalSales;
+}
+
+</script>
+
+</body>
+</html>
